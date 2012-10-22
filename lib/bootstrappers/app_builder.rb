@@ -129,5 +129,11 @@ module Bootstrappers
     def init_git
       run 'git init'
     end
+
+    def add_development_mail_interceptor
+      template 'development_mail_interceptor.rb', 'lib/development_mail_interceptor.rb',:force => true
+      template 'action_mailer.yml.example', 'config/action_mailer.yml.example',:force => true
+      template 'action_mailer.yml.example', 'config/action_mailer.yml',:force => true
+    end
   end
 end

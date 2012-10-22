@@ -5,3 +5,4 @@ public/uploads
 vendor/bundler_gems
 config/database.yml
 config/config.yml
+config/action_mailer.yml
