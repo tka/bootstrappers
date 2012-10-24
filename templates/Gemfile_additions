@@ -18,11 +18,26 @@ group :assets do
   gem "compass-rails"
 end
 
+group :test do
+  gem "spork"
+end
+
 group :development do 
   gem "capistrano"
   gem "cape"
+
+  gem "pry"
+  gem 'pry-rails'
+  
+  # for commnet and document
+  gem "rails-erd"
   gem "magic_encoding"
   gem "annotate"
+  gem "migration_comments"
+
+  # for autoreload spork
+  gem 'guard-spork'
+  gem "rb-inotify"
 end
 
 group :production do
