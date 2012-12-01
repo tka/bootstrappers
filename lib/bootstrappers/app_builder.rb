@@ -33,15 +33,22 @@ module Bootstrappers
     end
 
     def create_common_javascripts
+      remove_file 'app/assets/javascripts/application.js'
       directory 'javascripts', 'app/assets/javascripts'
     end
 
     def create_common_stylesheets
+      remove_file 'app/assets/stylesheets/application.css'
       directory 'stylesheets', 'app/assets/stylesheets'
     end
 
     def create_common_partial
       directory 'common', 'app/views/common'
+    end
+
+
+    def add_common_rake_tasks
+      directory 'tasks', 'lib/tasks'
     end
 
     def add_jquery_ui
@@ -80,6 +87,13 @@ module Bootstrappers
       
     end
 
+    def create_capistrano_files
+       template 'capistrano/deploy_rb.erb', 'config/deploy.rb',:force => true
+       template 'capistrano/Capfile', 'Capfile',:force => true
+       empty_directory 'config/deploy'
+       directory 'capistrano/deploy', 'config/deploy'
+    end
+
     def create_database
       bundle_command 'exec rake db:create'
     end
@@ -87,6 +101,21 @@ module Bootstrappers
     def generate_devise
       generate 'devise:install'
       generate 'devise User'
+    end
+
+    def customize_error_pages
+      meta_tags =<<-EOS
+  <meta charset='utf-8' />
+  <meta name='ROBOTS' content='NOODP' />
+      EOS
+      style_tags =<<-EOS
+<link href='/assets/application.css' media='all' rel='stylesheet' type='text/css' />
+      EOS
+      %w(500 404 422).each do |page|
+        inject_into_file "public/#{page}.html", meta_tags, :after => "<head>\n"
+        replace_in_file "public/#{page}.html", /<style.+>.+<\/style>/mi, style_tags.strip
+        replace_in_file "public/#{page}.html", /<!--.+-->\n/, ''
+      end
     end
 
     def build_settings_from_config

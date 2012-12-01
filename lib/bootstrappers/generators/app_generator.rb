@@ -21,11 +21,12 @@ module Bootstrappers
       invoke :create_common_javascripts
       invoke :create_common_stylesheets
       invoke :add_common_js_library
+      invoke :add_common_rake_tasks
       invoke :customize_gemfile
+      invoke :setup_capistrano
       invoke :setup_database
       invoke :configure_app
       invoke :create_initializers
-      invoke :setup_stylesheets
       invoke :remove_routes_comment_lines
       invoke :setup_root_route
       invoke :setup_git
@@ -63,9 +64,12 @@ module Bootstrappers
     end
 
     def add_common_js_library
-      say 'Add add_common_js_library to the standard application.js'
-      build :add_jquery_ui
-      build :add_bootstrap_js
+      say 'Add coomon javascripts to the standard application.js'
+    end
+
+    def add_common_rake_tasks
+      say 'Add common rake tasks'
+      build :add_common_rake_tasks
     end
 
 
@@ -74,6 +78,11 @@ module Bootstrappers
       build :add_custom_gems
       build :add_devise_gem
       bundle_command 'install'
+    end
+
+    def setup_capistrano
+      build :create_capistrano_files
+      say 'Setting up capinstrano'
     end
 
     def setup_database
@@ -108,11 +117,6 @@ module Bootstrappers
       build :customize_error_pages
     end
 
-
-    def setup_stylesheets
-      say 'Set up stylesheets'
-      build :setup_stylesheets
-    end
 
     def remove_routes_comment_lines
       build :remove_routes_comment_lines
